@@ -6,12 +6,21 @@ pool:
 
 steps:
 
+# 🔹 Set Java version
+- task: JavaToolInstaller@0
+  inputs:
+    versionSpec: '17'
+    jdkArchitectureOption: 'x64'
+    jdkSourceOption: 'PreInstalled'
+
+# 🔹 Build Spring Boot project
 - task: Maven@4
   inputs:
     mavenPomFile: 'pom.xml'
     goals: 'clean package'
+    javaHomeOption: 'JDKVersion'
+    jdkVersionOption: '1.17'
 
 - script: |
-    echo "Build completed successfully"
-    echo "Skipping Docker build (handled in local/ACR step)"
-  displayName: 'Build Stage'
+    echo "Build successful"
+  displayName: "Build Stage"
