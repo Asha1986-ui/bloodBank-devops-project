@@ -5,11 +5,13 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
-- task: Maven@3
+
+- task: Maven@4
   inputs:
     mavenPomFile: 'pom.xml'
     goals: 'clean package'
 
 - script: |
-    echo "Build Successful"
-    docker build -t bloodbank-app .
+    echo "Build completed successfully"
+    echo "Skipping Docker build (handled in local/ACR step)"
+  displayName: 'Build Stage'
