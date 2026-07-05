@@ -4,51 +4,21 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
-variables:
-  imageName: bloodbank-app
-  acrName: bloodbankacr2026
-  acrLoginServer: bloodbankacr2026.azurecr.io
-
 steps:
 
-# 1. Java setup
 - task: JavaToolInstaller@0
   inputs:
     versionSpec: '17'
     jdkArchitectureOption: 'x64'
     jdkSourceOption: 'PreInstalled'
 
-# 2. Maven build
 - task: Maven@4
   inputs:
     mavenPomFile: 'pom.xml'
     goals: 'clean package -DskipTests'
+    javaHomeOption: 'JDKVersion'
+    jdkVersionOption: '1.17'
 
-# 3. Azure CLI login
-- task: AzureCLI@2
-  inputs:
-    azureSubscription: ''
-    scriptType: bash
-    scriptLocation: inlineScript
-    inlineScript: |
-      echo "Logging into Azure..."
-      az account show
-
-# 4. Login to ACR
 - script: |
-    az acr login --name $(acrName)
-  displayName: "ACR Login"
-
-# 5. Build Docker image
-- script: |
-    docker build -t $(acrLoginServer)/$(imageName):latest .
-  displayName: "Docker Build"
-
-# 6. Push Docker image
-- script: |
-    docker push $(acrLoginServer)/$(imageName):latest
-  displayName: "Docker Push"
-
-# 7. Done
-- script: |
-    echo "PIPELINE SUCCESS 🚀"
+    echo "Build successful"
+  displayName: "Build Stage"
